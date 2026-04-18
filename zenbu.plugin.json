@@ -1,0 +1,8 @@
+{
+  "name": "recent-agents",
+  "services": [
+    "src/services/*.ts"
+  ],
+  "schema": "./src/schema.ts",
+  "migrations": "./kyju/index.ts"
+}
