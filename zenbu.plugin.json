@@ -7,6 +7,6 @@
   "migrations": "./kyju/index.ts",
   "setup": {
     "script": "./setup.ts",
-    "version": 6
+    "version": 7
   }
 }

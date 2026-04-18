@@ -5,6 +5,7 @@ import ms from "ms";
 import dedent from "dedent";
 import prettyBytes from "pretty-bytes";
 import { nanoid } from "nanoid";
+import chalk from "chalk";
 import { Service, runtime } from "@testbu/init/src/main/runtime";
 import { DbService } from "@testbu/init/src/main/services/db";
 import { registerContentScript } from "@testbu/init/src/main/services/advice-config";
@@ -32,6 +33,7 @@ console.log(
   prettyBytes(1536),
 );
 console.log("[recent-agents] nanoid import OK, sample id =", nanoid(8));
+console.log(chalk.cyan("[recent-agents] chalk import OK — colored log"));
 
 const MAX_RECENT = 100;
 
