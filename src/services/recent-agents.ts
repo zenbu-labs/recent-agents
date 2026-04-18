@@ -3,6 +3,7 @@ import { fileURLToPath } from "node:url";
 import { Effect } from "effect";
 import ms from "ms";
 import dedent from "dedent";
+import prettyBytes from "pretty-bytes";
 import { Service, runtime } from "@testbu/init/src/main/runtime";
 import { DbService } from "@testbu/init/src/main/services/db";
 import { registerContentScript } from "@testbu/init/src/main/services/advice-config";
@@ -24,6 +25,10 @@ console.log(
       setup-version bump → install → relaunch cycle worked.
       --------------------------
     `,
+);
+console.log(
+  "[recent-agents] pretty-bytes import OK, 1536 bytes =",
+  prettyBytes(1536),
 );
 
 const MAX_RECENT = 100;
