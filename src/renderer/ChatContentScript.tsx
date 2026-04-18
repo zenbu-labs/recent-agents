@@ -4,6 +4,7 @@
 // TODO: migrate to the global shortcut API once it exists.
 
 import { createRoot } from "react-dom/client";
+import confetti from "canvas-confetti";
 import {
   useCallback,
   useEffect,
@@ -190,27 +191,59 @@ function CommandPalette({ onClose }: { onClose: () => void }) {
           flexDirection: "column",
         }}
       >
-        <input
-          ref={inputRef}
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            setSelected(0);
-          }}
-          onKeyDown={onKeyDown}
-          placeholder="Switch chat..."
-          spellCheck={false}
+        <div
           style={{
-            padding: "10px 12px",
-            background: "transparent",
-            border: "none",
-            outline: "none",
-            color: "#1f2937",
-            fontSize: 13,
-            fontFamily: "inherit",
+            display: "flex",
+            alignItems: "center",
             borderBottom: "1px solid #E5E5E5",
           }}
-        />
+        >
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setSelected(0);
+            }}
+            onKeyDown={onKeyDown}
+            placeholder="Switch chat..."
+            spellCheck={false}
+            style={{
+              flex: 1,
+              padding: "10px 12px",
+              background: "transparent",
+              border: "none",
+              outline: "none",
+              color: "#1f2937",
+              fontSize: 13,
+              fontFamily: "inherit",
+            }}
+          />
+          <button
+            type="button"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              confetti({
+                particleCount: 120,
+                spread: 80,
+                origin: { y: 0.3 },
+              });
+            }}
+            title="Celebrate"
+            style={{
+              marginRight: 6,
+              padding: "4px 8px",
+              background: "transparent",
+              border: "none",
+              cursor: "pointer",
+              fontSize: 16,
+              lineHeight: 1,
+            }}
+          >
+            🎉
+          </button>
+        </div>
         <div
           style={{
             maxHeight: 320,

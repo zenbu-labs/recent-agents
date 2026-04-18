@@ -4,5 +4,9 @@
     "src/services/*.ts"
   ],
   "schema": "./src/schema.ts",
-  "migrations": "./kyju/index.ts"
+  "migrations": "./kyju/index.ts",
+  "setup": {
+    "script": "./setup.ts",
+    "version": 1
+  }
 }
