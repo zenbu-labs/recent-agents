@@ -2,6 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Effect } from "effect";
 import ms from "ms";
+import dedent from "dedent";
 import { Service, runtime } from "@testbu/init/src/main/runtime";
 import { DbService } from "@testbu/init/src/main/services/db";
 import { registerContentScript } from "@testbu/init/src/main/services/advice-config";
@@ -9,11 +10,21 @@ import { registerContentScript } from "@testbu/init/src/main/services/advice-con
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rendererDir = path.resolve(__dirname, "..", "renderer");
 
-// Side-effect import to verify the setup-version gate actually installed the
-// `ms` package. If setup.ts didn't run (or ran but the app hadn't been
-// relaunched to pick up new node_modules yet), importing ms would throw at
-// load time and the service would never register.
+// Side-effect imports to verify the setup-version gate actually installed
+// the new packages. If setup.ts didn't run (or ran but the app wasn't
+// relaunched to pick up new node_modules yet), importing these would throw
+// at load time and the service would never register.
 console.log("[recent-agents] ms import OK, 2h =", ms("2h"));
+console.log(
+  "[recent-agents] dedent import OK, banner:\n" +
+    dedent`
+      --- recent-agents boot ---
+      This banner lives entirely in a dedented template literal, which
+      means dedent resolved at import time. If you see it, the
+      setup-version bump → install → relaunch cycle worked.
+      --------------------------
+    `,
+);
 
 const MAX_RECENT = 100;
 
