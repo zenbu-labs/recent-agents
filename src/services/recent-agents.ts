@@ -1,12 +1,19 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { Effect } from "effect";
+import ms from "ms";
 import { Service, runtime } from "@testbu/init/src/main/runtime";
 import { DbService } from "@testbu/init/src/main/services/db";
 import { registerContentScript } from "@testbu/init/src/main/services/advice-config";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rendererDir = path.resolve(__dirname, "..", "renderer");
+
+// Side-effect import to verify the setup-version gate actually installed the
+// `ms` package. If setup.ts didn't run (or ran but the app hadn't been
+// relaunched to pick up new node_modules yet), importing ms would throw at
+// load time and the service would never register.
+console.log("[recent-agents] ms import OK, 2h =", ms("2h"));
 
 const MAX_RECENT = 100;
 
