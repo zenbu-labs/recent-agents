@@ -27,22 +27,10 @@ const logDo = (s: string) => console.log(`  → ${s}`)
 const logOk = (s: string) => console.log(`  ✓ ${s}`)
 
 async function ensureDeps(): Promise<void> {
-  // Install the plugin's own node_modules via the monorepo pnpm that the
-  // kernel has already cached in ~/Library/Caches/Zenbu/bin. This plugin
-  // lives OUTSIDE the monorepo's pnpm-workspace, so we run pnpm inside the
-  // plugin dir directly.
-  const nodeModules = path.join(PLUGIN_ROOT, "node_modules")
-  const lockPath = path.join(PLUGIN_ROOT, "pnpm-lock.yaml")
-
-  if (fs.existsSync(nodeModules) && fs.existsSync(lockPath)) {
-    // Best-effort: check if a known dep exists to short-circuit reinstall.
-    const confetti = path.join(nodeModules, "canvas-confetti", "package.json")
-    if (fs.existsSync(confetti)) {
-      logOk("deps already installed")
-      return
-    }
-  }
-
+  // Always let pnpm decide what to do — it's already idempotent and fast
+  // when the lockfile and node_modules are in sync. Any custom "is dep X
+  // installed?" heuristic we add here gets stale the moment a new dep
+  // lands.
   logDo("installing recent-agents deps")
   const pnpmBin = path.join(
     process.env.HOME ?? "",
