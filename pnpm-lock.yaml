@@ -8,27 +8,9 @@ importers:
 
   .:
     dependencies:
-      canvas-confetti:
-        specifier: ^1.9.3
-        version: 1.9.4
-      chalk:
-        specifier: ^5.6.2
-        version: 5.6.2
-      dedent:
-        specifier: ^1.5.3
-        version: 1.7.2
       effect:
         specifier: ^3.20.0
         version: 3.21.1
-      ms:
-        specifier: ^2.1.3
-        version: 2.1.3
-      nanoid:
-        specifier: ^5.1.9
-        version: 5.1.9
-      pretty-bytes:
-        specifier: ^7.0.0
-        version: 7.1.0
       react:
         specifier: ^19.2.4
         version: 19.2.5
@@ -39,12 +21,6 @@ importers:
         specifier: ^4
         version: 4.3.6
     devDependencies:
-      '@types/canvas-confetti':
-        specifier: ^1.9.0
-        version: 1.9.0
-      '@types/ms':
-        specifier: ^2.1.0
-        version: 2.1.0
       '@types/react':
         specifier: ^19.0.0
         version: 19.2.14
@@ -57,12 +33,6 @@ packages:
   '@standard-schema/spec@1.1.0':
     resolution: {integrity: sha512-l2aFy5jALhniG5HgqrD6jXLi/rUWrKvqN/qJx6yoJsgKhblVd+iqqU4RCXavm/jPityDo5TCvKMnpjKnOriy0w==}
 
-  '@types/canvas-confetti@1.9.0':
-    resolution: {integrity: sha512-aBGj/dULrimR1XDZLtG9JwxX1b4HPRF6CX9Yfwh3NvstZEm1ZL7RBnel4keCPSqs1ANRu1u2Aoz9R+VmtjYuTg==}
-
-  '@types/ms@2.1.0':
-    resolution: {integrity: sha512-GsCCIZDE/p3i96vtEqx+7dBUGXrc7zeSK3wwPHIaRThS+9OhWIXRqzs4d6k1SVU8g91DrNRWxWUGhp5KXQb2VA==}
-
   '@types/react-dom@19.2.3':
     resolution: {integrity: sha512-jp2L/eY6fn+KgVVQAOqYItbF0VY/YApe5Mz2F0aykSO8gx31bYCZyvSeYxCHKvzHG5eZjc+zyaS5BrBWya2+kQ==}
     peerDependencies:
@@ -71,23 +41,8 @@ packages:
   '@types/react@19.2.14':
     resolution: {integrity: sha512-ilcTH/UniCkMdtexkoCN0bI7pMcJDvmQFPvuPvmEaYA/NSfFTAgdUSLAoVjaRJm7+6PvcM+q1zYOwS4wTYMF9w==}
 
-  canvas-confetti@1.9.4:
-    resolution: {integrity: sha512-yxQbJkAVrFXWNbTUjPqjF7G+g6pDotOUHGbkZq2NELZUMDpiJ85rIEazVb8GTaAptNW2miJAXbs1BtioA251Pw==}
-
-  chalk@5.6.2:
-    resolution: {integrity: sha512-7NzBL0rN6fMUW+f7A6Io4h40qQlG+xGmtMxfbnH/K7TAtt8JQWVQK+6g0UXKMeVJoyV5EkkNsErQ8pVD3bLHbA==}
-    engines: {node: ^12.17.0 || ^14.13 || >=16.0.0}
-
   csstype@3.2.3:
     resolution: {integrity: sha512-z1HGKcYy2xA8AGQfwrn0PAy+PB7X/GSj3UVJW9qKyn43xWa+gl5nXmU4qqLMRzWVLFC8KusUX8T/0kCiOYpAIQ==}
-
-  dedent@1.7.2:
-    resolution: {integrity: sha512-WzMx3mW98SN+zn3hgemf4OzdmyNhhhKz5Ay0pUfQiMQ3e1g+xmTJWp/pKdwKVXhdSkAEGIIzqeuWrL3mV/AXbA==}
-    peerDependencies:
-      babel-plugin-macros: ^3.1.0
-    peerDependenciesMeta:
-      babel-plugin-macros:
-        optional: true
 
   effect@3.21.1:
     resolution: {integrity: sha512-bA3TsBd0mByThuCnE6FQqS+L3DLazk4UbE9jp0CqVfIjQl5DKi8sAe93O/ZKeF7clL65fJxcsVGiAKYXdnHByA==}
@@ -95,18 +50,6 @@ packages:
   fast-check@3.23.2:
     resolution: {integrity: sha512-h5+1OzzfCC3Ef7VbtKdcv7zsstUQwUDlYpUTvjeUsJAssPgLn7QzbboPtL5ro04Mq0rPOsMzl7q5hIbRs2wD1A==}
     engines: {node: '>=8.0.0'}
-
-  ms@2.1.3:
-    resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
-
-  nanoid@5.1.9:
-    resolution: {integrity: sha512-ZUvP7KeBLe3OZ1ypw6dI/TzYJuvHP77IM4Ry73waSQTLn8/g8rpdjfyVAh7t1/+FjBtG4lCP42MEbDxOsRpBMw==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
-
-  pretty-bytes@7.1.0:
-    resolution: {integrity: sha512-nODzvTiYVRGRqAOvE84Vk5JDPyyxsVk0/fbA/bq7RqlnhksGpset09XTxbpvLTIjoaF7K8Z8DG8yHtKGTPSYRw==}
-    engines: {node: '>=20'}
 
   pure-rand@6.1.0:
     resolution: {integrity: sha512-bVWawvoZoBYpp6yIoQtQXHZjmz35RSVHnUOTefl8Vcjr8snTPY1wnpSPMWekcFwbxI6gtmT7rSYPFvz71ldiOA==}
@@ -130,10 +73,6 @@ snapshots:
 
   '@standard-schema/spec@1.1.0': {}
 
-  '@types/canvas-confetti@1.9.0': {}
-
-  '@types/ms@2.1.0': {}
-
   '@types/react-dom@19.2.3(@types/react@19.2.14)':
     dependencies:
       '@types/react': 19.2.14
@@ -142,13 +81,7 @@ snapshots:
     dependencies:
       csstype: 3.2.3
 
-  canvas-confetti@1.9.4: {}
-
-  chalk@5.6.2: {}
-
   csstype@3.2.3: {}
-
-  dedent@1.7.2: {}
 
   effect@3.21.1:
     dependencies:
@@ -158,12 +91,6 @@ snapshots:
   fast-check@3.23.2:
     dependencies:
       pure-rand: 6.1.0
-
-  ms@2.1.3: {}
-
-  nanoid@5.1.9: {}
-
-  pretty-bytes@7.1.0: {}
 
   pure-rand@6.1.0: {}
 

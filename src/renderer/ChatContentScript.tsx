@@ -4,7 +4,6 @@
 // TODO: migrate to the global shortcut API once it exists.
 
 import { createRoot } from "react-dom/client";
-import confetti from "canvas-confetti";
 import {
   useCallback,
   useEffect,
@@ -62,9 +61,17 @@ function CommandPalette({ onClose }: { onClose: () => void }) {
   ) ?? []) as WindowState[];
 
   const sessionById = useMemo(() => {
+    const openIds = new Set<string>();
+    for (const ws of windowStates) {
+      for (const p of ws.panes ?? []) {
+        for (const id of p.tabIds ?? []) openIds.add(id);
+      }
+    }
     const m = new Map<string, Session>();
     for (const ws of windowStates) {
-      for (const s of ws.sessions ?? []) m.set(s.id, s);
+      for (const s of ws.sessions ?? []) {
+        if (openIds.has(s.id)) m.set(s.id, s);
+      }
     }
     return m;
   }, [windowStates]);
@@ -219,30 +226,6 @@ function CommandPalette({ onClose }: { onClose: () => void }) {
               fontFamily: "inherit",
             }}
           />
-          <button
-            type="button"
-            onMouseDown={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              confetti({
-                particleCount: 120,
-                spread: 80,
-                origin: { y: 0.3 },
-              });
-            }}
-            title="Celebrate"
-            style={{
-              marginRight: 6,
-              padding: "4px 8px",
-              background: "transparent",
-              border: "none",
-              cursor: "pointer",
-              fontSize: 16,
-              lineHeight: 1,
-            }}
-          >
-            🎉
-          </button>
         </div>
         <div
           style={{
@@ -259,7 +242,7 @@ function CommandPalette({ onClose }: { onClose: () => void }) {
                 fontSize: 12,
               }}
             >
-              No recent chats yet — switch tabs to build up the list.
+              No open chats.
             </div>
           )}
           {filtered.map((id, i) => {
