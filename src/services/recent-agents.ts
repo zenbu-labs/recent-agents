@@ -3,7 +3,10 @@ import { fileURLToPath } from "node:url";
 import { Effect } from "effect";
 import { Service, runtime } from "@testbu/init/src/main/runtime";
 import { DbService } from "@testbu/init/src/main/services/db";
+import { ShortcutService } from "@testbu/init/src/main/services/shortcut";
 import { registerContentScript } from "@testbu/init/src/main/services/advice-config";
+
+export const SWITCH_CHAT_SHORTCUT_ID = "recent-agents.switchChat";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rendererDir = path.resolve(__dirname, "..", "renderer");
@@ -20,8 +23,16 @@ type WindowState = {
 
 export class RecentAgentsService extends Service {
   static key = "recent-agents";
-  static deps = { db: DbService, baseWindow: "base-window" };
-  declare ctx: { db: DbService; baseWindow: any };
+  static deps = {
+    db: DbService,
+    baseWindow: "base-window",
+    shortcut: ShortcutService,
+  };
+  declare ctx: {
+    db: DbService;
+    baseWindow: any;
+    shortcut: ShortcutService;
+  };
 
   async switchToSession(sessionId: string): Promise<{ ok: boolean }> {
     const client = this.ctx.db.client;
@@ -93,8 +104,17 @@ export class RecentAgentsService extends Service {
     this.effect("register-chat-script", () => {
       const scriptPath = path.resolve(rendererDir, "ChatContentScript.tsx");
       console.log("[recent-agents] registering content script:", scriptPath);
-      return registerContentScript("chat", scriptPath);
+      return registerContentScript("*", scriptPath);
     });
+
+    this.effect("register-shortcut", () =>
+      this.ctx.shortcut.register({
+        id: SWITCH_CHAT_SHORTCUT_ID,
+        defaultBinding: "cmd+p",
+        description: "Open recent chats palette",
+        scope: "global",
+      }),
+    );
 
     this.effect("track-recent", () => {
       const client = this.ctx.db.client;

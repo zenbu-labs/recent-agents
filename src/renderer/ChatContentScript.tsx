@@ -1,7 +1,8 @@
-// Cmd+P is wired via a content script injected into the chat view only.
-// This means Cmd+P only opens the palette when focus is inside a chat iframe —
-// if the user is on an orchestrator/sidebar/other view, nothing happens.
-// TODO: migrate to the global shortcut API once it exists.
+// Palette UI for the global `recent-agents.switchChat` shortcut (default
+// binding Cmd+P). The shortcut is registered in `RecentAgentsService` with
+// scope "global"; this content script is injected into every view (`*`).
+// `useShortcutHandler` with the default `{ focused: true }` predicate means
+// only the focused iframe's palette opens.
 
 import { createRoot } from "react-dom/client";
 import {
@@ -23,6 +24,9 @@ import {
   useDb,
 } from "@testbu/init/src/renderer/lib/kyju-react";
 import type { WsConnectionState } from "@testbu/init/src/renderer/lib/ws-connection";
+import { useShortcutHandler } from "@testbu/init/src/renderer/lib/shortcut-handler";
+
+const SWITCH_CHAT_SHORTCUT_ID = "recent-agents.switchChat";
 
 type Agent = {
   id: string;
@@ -231,7 +235,6 @@ function CommandPalette({ onClose }: { onClose: () => void }) {
           style={{
             maxHeight: 320,
             overflowY: "auto",
-            padding: "3px 0",
           }}
         >
           {filtered.length === 0 && (
@@ -290,26 +293,19 @@ function CommandPalette({ onClose }: { onClose: () => void }) {
 function PaletteRoot() {
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    console.log("[recent-agents] PaletteRoot mounted, attaching keydown");
-    const handler = (e: KeyboardEvent) => {
-      const isCmdP =
-        e.metaKey && !e.ctrlKey && !e.altKey && !e.shiftKey && e.key === "p";
-      if (isCmdP) {
-        console.log("[recent-agents] cmd+p detected, toggling palette");
-        e.preventDefault();
-        e.stopPropagation();
-        e.stopImmediatePropagation();
-        setOpen((v) => !v);
-      }
-    };
-    window.addEventListener("keydown", handler, true);
-    document.addEventListener("keydown", handler, true);
-    return () => {
-      window.removeEventListener("keydown", handler, true);
-      document.removeEventListener("keydown", handler, true);
-    };
-  }, []);
+  useShortcutHandler({
+    id: SWITCH_CHAT_SHORTCUT_ID,
+    handler: () => {
+      // The "*" content script also runs in the orchestrator shell. When
+      // focus is inside a child iframe, `document.hasFocus()` is true in
+      // BOTH the iframe and the orchestrator, so `useShortcutHandler`'s
+      // `{ focused: true }` predicate matches both — yielding two palettes.
+      // In the orchestrator, the active element is the focused iframe's
+      // <iframe> node; defer to it.
+      if (document.activeElement?.tagName === "IFRAME") return;
+      setOpen((v) => !v);
+    },
+  });
 
   if (!open) return null;
   return <CommandPalette onClose={() => setOpen(false)} />;
@@ -345,6 +341,7 @@ function AppRoot() {
 console.log("[recent-agents] content script loaded");
 
 function mount() {
+  if (document.getElementById("zenbu-recent-agents-palette")) return;
   const el = document.createElement("div");
   el.id = "zenbu-recent-agents-palette";
   document.body.appendChild(el);

@@ -12,6 +12,7 @@
 
 import { $ } from "bun"
 import fs from "node:fs"
+import { promises as fsp } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 
@@ -25,6 +26,34 @@ const stepError = (id: string, msg: string) =>
   console.log(`##ZENBU_STEP:error:${id}:${msg}`)
 const logDo = (s: string) => console.log(`  → ${s}`)
 const logOk = (s: string) => console.log(`  ✓ ${s}`)
+
+async function ensureTsconfigLocal(): Promise<void> {
+  const packagesDir = path.resolve(PLUGIN_ROOT, "..", "zenbu", "packages")
+  const registryDir = path.resolve(PLUGIN_ROOT, "..", "..", "registry")
+  const tsconfig = path.join(PLUGIN_ROOT, "tsconfig.local.json")
+  const expected =
+    JSON.stringify(
+      {
+        compilerOptions: {
+          paths: {
+            "@testbu/*": [`${packagesDir}/*`],
+            "#registry/*": [`${registryDir}/*`],
+          },
+        },
+      },
+      null,
+      2,
+    ) + "\n"
+  try {
+    const current = await fsp.readFile(tsconfig, "utf8")
+    if (current === expected) {
+      logOk("tsconfig.local.json up-to-date")
+      return
+    }
+  } catch {}
+  await fsp.writeFile(tsconfig, expected)
+  logOk("wrote tsconfig.local.json")
+}
 
 async function ensureDeps(): Promise<void> {
   // Always let pnpm decide what to do — it's already idempotent and fast
@@ -68,6 +97,11 @@ async function runStep(
 
 async function main(): Promise<void> {
   process.chdir(PLUGIN_ROOT)
+  await runStep(
+    "tsconfig",
+    "Configuring tsconfig.local.json",
+    ensureTsconfigLocal,
+  )
   await runStep("deps", "Installing recent-agents deps", ensureDeps)
   console.log("\n##ZENBU_STEP:all-done")
 }
